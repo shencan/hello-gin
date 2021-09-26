@@ -1,0 +1,63 @@
+{{define "default/index.html"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="/static/css/public.css">
+</head>
+<body>
+
+<img src="/static/image/index.jpg">
+
+{{template "public/header.html" .}}
+
+    <h1>{{.title}}</h1>
+
+    <h2>{{.users.Title}}</h2>
+
+    {{$t := .title}}
+    <h3>{{$t}}</h3>赋值
+
+    {{if ge .num 60}}
+        <h5>大于等于 [ge] </h5>
+        <h5>大于 [gt] </h5>
+        <h5>等于 [eq] </h5>
+        <h5>不等于 [ne] </h5>
+        <h5>小于 [lt] </h5>
+        <h5>小于等于 [le] </h5>
+    {{else}}
+        <h5>不及格</h5>
+    {{end}}
+
+    {{range $key,$value:=.hobby}}
+    <li>{{$key}} -> {{$value}}</li>
+    {{end}}
+
+    {{range $key,$value:=.userList}}
+        <li>{{$key}} - {{$value.Title}} -  {{$value.Desc}} -</li>
+    {{end}}
+
+    {{range $key,$value:=.null}}
+        <li>{{$key}} - {{$value.Title}} -  {{$value.Desc}} -</li>
+    {{else}}
+        空的
+    {{end}}
+
+    <!--结构结构体-->
+
+    {{with .news}}
+        {{.Title}}
+    {{end}}
+
+    <!--    自定义模板函数-->
+    {{len .title}}
+
+    <br>
+    {{.date}}
+    <br>
+    {{UnixToTime .date " 时间"}}
+
+</body>
+</html>
+{{end}}
