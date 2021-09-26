@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./routers"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"net/http"
@@ -154,18 +155,13 @@ func main() {
 		c.String(http.StatusOK, "值：%v", "你好首页")
 	})
 
-	r.GET("/api", func(c *gin.Context) {
-		c.String(http.StatusOK, "值：%v", "你好api")
-	})
 
-	r.GET("/api/userList", func(c *gin.Context) {
-		c.String(http.StatusOK, "值：%v", "xx")
-	})
 
 	r.GET("/admin/userList", func(c *gin.Context) {
 		c.String(http.StatusOK, "值：%v", "xx")
 	})
 
+	routers.ApiRoutersInit(r)
 
 	r.Run(":9999") // 监听并在 0.0.0.0:8080 上启动服务
 
