@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"hello-gin/model"
 	"hello-gin/routers"
 	"html/template"
 	"net/http"
@@ -13,11 +14,6 @@ type User struct {
 	Name  string `json:"name" form:"name"`
 	Title string `json:"title" form:"title"`
 	Desc  string `json:"desc" form:"desc"`
-}
-
-func UnixToTime(timestamp int, a string) string {
-	t := time.Unix(int64(timestamp), 0)
-	return t.Format("2006-01-02 15:04:05") + a
 }
 
 func initMiddleware(c *gin.Context) {
@@ -37,7 +33,7 @@ func main() {
 
 	//自定义函数
 	r.SetFuncMap(template.FuncMap{
-		"UnixToTime": UnixToTime,
+		"UnixToTime": model.UnixToTime,
 	})
 
 	//配置模板文件
