@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"hello-gin/model"
 	"hello-gin/routers"
@@ -42,9 +44,12 @@ func main() {
 	//静态web目录 第一个路由 第二个映射目录
 	r.Static("/static", "./static")
 
+	//配置session
+	store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("miyao"))
+	r.Use(sessions.Sessions("mysession", store))
+
 	//全局中间件
 	r.Use(initMiddleware)
-
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
