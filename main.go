@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./routers"
+	"hello-gin/routers"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"net/http"
@@ -105,23 +105,7 @@ func main() {
 		})
 	})
 
-	r.GET("/admin", func(c *gin.Context) {
 
-		id := c.Query("id")
-		title := c.Query("title")
-		page := c.DefaultQuery("page", "1")
-
-		a := &User{
-			Title: "后台首页",
-			Desc:  "描述",
-		}
-		c.HTML(http.StatusOK, "admin/index.html", gin.H{
-			"title": title,
-			"page":  page,
-			"id":    id,
-			"users": a,
-		})
-	})
 
 	//post
 	r.GET("/user", func(c *gin.Context) {
@@ -155,13 +139,8 @@ func main() {
 		c.String(http.StatusOK, "值：%v", "你好首页")
 	})
 
-
-
-	r.GET("/admin/userList", func(c *gin.Context) {
-		c.String(http.StatusOK, "值：%v", "xx")
-	})
-
 	routers.ApiRoutersInit(r)
+	routers.AdminRoutersInit(r)
 
 	r.Run(":9999") // 监听并在 0.0.0.0:8080 上启动服务
 
