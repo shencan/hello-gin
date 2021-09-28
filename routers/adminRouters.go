@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"hello-gin/controller/admin"
+	"hello-gin/middlewares"
 	"net/http"
 )
 
@@ -13,8 +14,15 @@ type User struct {
 }
 
 func AdminRoutersInit(r *gin.Engine) {
-	adminRouters := r.Group("/admin")
+	adminRouters := r.Group("/admin",middlewares.InitMiddleware)
 	{
+		//不加括号，加括号为引用，不加括号为注册
+		adminRouters.GET("/", admin.IndexController{}.Index)
+		adminRouters.GET("/user", admin.UserController{}.Index)
+		adminRouters.GET("/user/add", admin.UserController{}.Add)
+		adminRouters.GET("/user/edit", admin.UserController{}.Edit)
+		adminRouters.GET("/user/delete", admin.UserController{}.Delete)
+
 		adminRouters.GET("/test", func(c *gin.Context) {
 
 			id := c.Query("id")
@@ -32,12 +40,5 @@ func AdminRoutersInit(r *gin.Engine) {
 				"users": a,
 			})
 		})
-
-		//不加括号，加括号为引用，不加括号为注册
-		adminRouters.GET("/", admin.IndexController{}.Index)
-		adminRouters.GET("/user", admin.UserController{}.Index)
-		adminRouters.GET("/user/add", admin.UserController{}.Add)
-		adminRouters.GET("/user/edit", admin.UserController{}.Edit)
-		adminRouters.GET("/user/delete", admin.UserController{}.Delete)
 	}
 }

@@ -1,8 +1,9 @@
 package main
 
 import (
-	"hello-gin/routers"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"hello-gin/routers"
 	"html/template"
 	"net/http"
 	"time"
@@ -18,9 +19,20 @@ func UnixToTime(timestamp int, a string) string {
 	t := time.Unix(int64(timestamp), 0)
 	return t.Format("2006-01-02 15:04:05") + a
 }
+
+func initMiddleware(c *gin.Context) {
+	start := time.Now().UnixNano()
+	fmt.Println("中间件开始1")
+	c.Next()
+	fmt.Println("中间件开始2")
+	end := time.Now().UnixNano()
+	fmt.Println(end - start)
+}
+
 func main() {
 
 	//创建一个默认路由引擎
+	//Default是默认有中间件的，不希望使用就gin.New()
 	r := gin.Default()
 
 	//自定义函数
@@ -33,6 +45,10 @@ func main() {
 
 	//静态web目录 第一个路由 第二个映射目录
 	r.Static("/static", "./static")
+
+	//全局中间件
+	r.Use(initMiddleware)
+
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
@@ -105,8 +121,6 @@ func main() {
 		})
 	})
 
-
-
 	//post
 	r.GET("/user", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "admin/user.html", gin.H{})
@@ -134,9 +148,9 @@ func main() {
 		}
 	})
 
-
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "值：%v", "你好首页")
+	r.GET("/", initMiddleware, func(c *gin.Context) {
+		fmt.Println("首页")
+		c.String(http.StatusOK, "你好首页")
 	})
 
 	routers.ApiRoutersInit(r)
