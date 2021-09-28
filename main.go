@@ -5,7 +5,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
-	"hello-gin/model"
+	"hello-gin/models"
 	"hello-gin/routers"
 	"html/template"
 	"net/http"
@@ -35,7 +35,7 @@ func main() {
 
 	//自定义函数
 	r.SetFuncMap(template.FuncMap{
-		"UnixToTime": model.UnixToTime,
+		"UnixToTime": models.UnixToTime,
 	})
 
 	//配置模板文件
